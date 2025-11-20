@@ -16,7 +16,7 @@ from sklearn.linear_model import LinearRegression
 # 4 - 🔥 Top 7 Trending Coins (Live Data)
 # 5 - ⚖️ ETH vs BTC Correlation (Market Check)
 # ==========================================
-DEMO_MODE = 1
+DEMO_MODE = 5
 # ==========================================
 
 def fetch_data(coin_id, days=30):
@@ -131,13 +131,14 @@ def run_trending_coins():
     names = [c['item']['name'] for c in coins]
     ranks = [c['item']['market_cap_rank'] for c in coins]
     ids = [c['item']['id'] for c in coins]
-    
+    # Plot
     plt.figure(figsize=(10, 6))
     bars = plt.barh(names, ranks, color='#4CAF50')
     plt.xlabel('Market Cap Rank (Lower is Better)')
-    plt.title('🔥 Top 7 Trending Coins on CoinGecko')
-    plt.gca().invert_yaxis()
+    plt.title('Top 7 Trending Coins on CoinGecko') # Removed emoji
+    plt.gca().invert_yaxis() # Best rank on top
     
+    # Add labels
     for bar in bars:
         width = bar.get_width()
         plt.text(width + 1, bar.get_y() + bar.get_height()/2, f'Rank: {width}', va='center')
@@ -150,21 +151,26 @@ def run_trending_coins():
 def run_eth_btc_correlation():
     print("--- Running Mode 5: ETH vs BTC Correlation ---")
     
+    # Fetch both
     btc = fetch_data('bitcoin', days=90)
     eth = fetch_data('ethereum', days=90)
     
+    # Merge on index
     df = pd.DataFrame({'BTC': btc['price'], 'ETH': eth['price']})
     df.dropna(inplace=True)
     
+    # Calculate Correlation
     correlation = df['BTC'].corr(df['ETH'])
     
+    # Normalize for plotting (start at 100)
     df_norm = df / df.iloc[0] * 100
     
+    # Plot
     plt.figure(figsize=(10, 6))
     plt.plot(df_norm.index, df_norm['BTC'], label='Bitcoin', color='#F7931A')
     plt.plot(df_norm.index, df_norm['ETH'], label='Ethereum', color='#627EEA')
     
-    plt.title(f'ETH vs BTC Correlation (Corr: {correlation:.2f})')
+    plt.title(f'ETH vs BTC Correlation (Corr: {correlation:.2f})') # Removed emoji
     plt.xlabel('Date')
     plt.ylabel('Normalized Price (Start=100)')
     plt.legend()
@@ -180,7 +186,8 @@ def save_plot(filename):
     path = os.path.join(output_dir, filename)
     plt.savefig(path)
     print(f"Saved chart to: {path}")
-    print(f"👉 Local file: results/{filename}")
+    # VS Code often recognizes paths starting with ./ as links
+    print(f"./results/{filename}")
 
 def save_data(df, filename):
     output_dir = '/data/outputs' if os.path.exists('/data/outputs') else './data/outputs'
@@ -188,7 +195,7 @@ def save_data(df, filename):
     path = os.path.join(output_dir, filename)
     df.to_csv(path)
     print(f"Saved data to: {path}")
-    print(f"👉 Local file: results/{filename}")
+    print(f"./results/{filename}")
 
 def main():
     print(f"Starting Ocean Compute Job... (Mode: {DEMO_MODE})")
@@ -213,13 +220,15 @@ def main():
         print(f"Error: {e}")
         result = {"error": str(e)}
         
+    # Save Result JSON
     output_dir = '/data/outputs' if os.path.exists('/data/outputs') else './data/outputs'
     os.makedirs(output_dir, exist_ok=True)
     with open(os.path.join(output_dir, 'result.json'), 'w') as f:
         json.dump(result, f)
     
     print("Job Completed Successfully! 🌊")
-    print("📂 Local Results: ./results")
+    print("Local Results Folder:")
+    print("./results")
 
 if __name__ == "__main__":
     main()
