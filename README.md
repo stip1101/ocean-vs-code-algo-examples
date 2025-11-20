@@ -7,7 +7,17 @@
 - **Ocean Protocol VS Code Extension** ([Install from the Marketplace](https://marketplace.visualstudio.com/items?itemName=OceanProtocol.ocean-protocol-vscode-extension&ssr=false#overview))
 
 ### 2. Installation
-1.  Clone or download this repository.
+**Option A: Using Git (Recommended)**
+Open your terminal and run:
+```bash
+git clone https://github.com/stip1101/ocean-vs-code-algo-examples.git
+```
+
+**Option B: Download as ZIP (Easier)**
+1.  Go to [this link](https://github.com/stip1101/ocean-vs-code-algo-examples).
+2.  Click the green **<> Code** button.
+3.  Select **Download ZIP**.
+4.  Unzip the folder.
 2.  Open the folder in VS Code.
 3.  You should see the Ocean Protocol icon in your Activity Bar.
 
